@@ -23,7 +23,19 @@ async function userRegister(req,res) {
         password
     })
     jwt.sign({email}, process.env.JWT_SECRET, { expiresIn: '1h' })
-    return res.status(200).json({"message": "Register Successfull!"})
+    return res.status(200).json({"message": "Register Successful!"})
 }
 
-module.exports = {userRegister}
+async function userLogin(req,res) {
+    const {email, password} = req.body
+    const data = await User.findOne({email})
+    if(!data) return res.status(400).json({"message": "Invalid Email address"});
+    const isMatch = await bcrypt.compare(password,data.password)
+    if(!isMatch){
+        return res.status(400).json({"message": "Invalid password"})
+    }
+    jwt.sign({email}, process.env.JWT_SECRET, { expiresIn: '1h' })
+    return res.status(200).json({"message": "Login successful"})
+}
+
+module.exports = {userRegister, userLogin}

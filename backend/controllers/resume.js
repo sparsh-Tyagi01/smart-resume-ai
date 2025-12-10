@@ -5,11 +5,11 @@ async function uploadResume(req,res) {
     const userId = req.user.id
 
     if(!userId){
-        return res.status(400).json({"message": "userId required"})
+        return res.status(400).json({message: "userId required"})
     }
 
     if(!req.file){
-        return res.status(400).json({"message": "No resume file uploaded"})
+        return res.status(400).json({message: "No resume file uploaded"})
     }
 
     const uploaded = await cloudinary.uploader.upload(req.file.path, {
@@ -32,19 +32,19 @@ async function uploadResume(req,res) {
         resumeUrl: uploaded.secure_url
     })
 
-    return res.status(200).json({"message": "Resume uploaded successfully", data})
+    return res.status(200).json({message: "Resume uploaded successfully", data})
 }
 
 async function getMyResume(req,res) {
     const userId = req.user.id
     if(!userId){
-        return res.status(400).json({"message": "userId required"})
+        return res.status(400).json({message: "userId required"})
     }
 
     const data = await Resume.findOne({userId})
 
     if(!data){
-        return res.status(400).json({"message": "Upload resume"})
+        return res.status(400).json({message: "Upload resume"})
     }
 
     return res.status(200).json({data})
@@ -53,12 +53,12 @@ async function getMyResume(req,res) {
 async function updateResume(req,res) {
     const userId = req.user.id
     if(!userId){
-        return res.status(400).json({"message": "userId required"})
+        return res.status(400).json({message: "userId required"})
     }
     const data = await Resume({userId})
 
     if(!data){
-        return res.status(404).json({"message": "Resume not found"})
+        return res.status(404).json({message: "Resume not found"})
     }
 
     const {name, email, phone, github, linkedin, skills, experience, education} = req.body
@@ -84,7 +84,7 @@ async function updateResume(req,res) {
 
     const updated = await data.save()
 
-    return res.status(200).json({"message": "Updated successfully", updated})
+    return res.status(200).json({message: "Updated successfully", updated})
 }
 
 module.exports = {uploadResume, getMyResume, updateResume}

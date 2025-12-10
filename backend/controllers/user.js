@@ -16,26 +16,25 @@ async function userRegister(req,res) {
         return res.status(404).json({"message": "Phone no. already register"})
     }
     const hashedPassword = await bcrypt.hash(password, 10)
-    await User.create({
+    const data = await User.create({
         name,
         email,
-        hashedPassword,
+        password: hashedPassword,
         password
     })
-    jwt.sign({email}, process.env.JWT_SECRET, { expiresIn: '1h' })
-    return res.status(200).json({"message": "Register Successful!"})
+    const token = jwt.sign({id: data._id, email: data.email}, process.env.JWT_SECRET, { expiresIn: '1h' })
+    return res.status(200).json({"message": "Register Successful!", token})
 }
 
 async function userLogin(req,res) {
-    const {email, password} = req.body
     const data = await User.findOne({email})
     if(!data) return res.status(400).json({"message": "Invalid Email address"});
     const isMatch = await bcrypt.compare(password,data.password)
     if(!isMatch){
         return res.status(400).json({"message": "Invalid password"})
     }
-    jwt.sign({email}, process.env.JWT_SECRET, { expiresIn: '1h' })
-    return res.status(200).json({"message": "Login successful"})
+    jwt.sign({id: data._id, email: data.email}, process.env.JWT_SECRET, { expiresIn: '1h' })
+    return res.status(200).json({"message": "Login successful", token})
 }
 
 module.exports = {userRegister, userLogin}

@@ -42,4 +42,12 @@ async function getTemplatesById(req,res) {
     return res.status(200).json({data})
 }
 
-module.exports = {createTemplate, getTemplates, getTemplatesById}
+async function deleteTemplate(req,res) {
+    const data = await Template.findByIdAndDelete(req.params.id)
+    if(!data){
+        return res.status(404).json({message: "Template not found"})
+    }
+    return res.status(200).json({message: "Deleted Successfully"})
+}
+
+module.exports = {createTemplate, getTemplates, getTemplatesById, deleteTemplate}

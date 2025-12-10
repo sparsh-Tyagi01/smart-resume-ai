@@ -23,7 +23,15 @@ async function createTemplate(req,res) {
         fields: req.body.fields ? req.body.fields.split(",") : []
     })
 
-    return res.status(200).json({message: "Created Successfuly"})
+    return res.status(200).json({message: "Created Successfuly", data})
 }
 
-module.exports = {createTemplate}
+async function getTemplates(req,res) {
+    const data = await Template.find().sort({ccreatedAt: -1})
+    if(!data){
+        return res.status(404).json({message: "Template not found"})
+    }
+    return res.status(200).json({data})
+}
+
+module.exports = {createTemplate, getTemplates}

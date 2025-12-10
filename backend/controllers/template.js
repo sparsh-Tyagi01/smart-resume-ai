@@ -34,4 +34,12 @@ async function getTemplates(req,res) {
     return res.status(200).json({data})
 }
 
-module.exports = {createTemplate, getTemplates}
+async function getTemplatesById(req,res) {
+    const data = await Template.findOne(req.params.id)
+    if(!data){
+        return res.status(404).json({message: "Template not found"})
+    }
+    return res.status(200).json({data})
+}
+
+module.exports = {createTemplate, getTemplates, getTemplatesById}

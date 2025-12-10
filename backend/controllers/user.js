@@ -19,10 +19,17 @@ async function userRegister(req,res) {
     const data = await User.create({
         name,
         email,
+        phone,
         password: hashedPassword,
-        password
     })
-    const token = jwt.sign({id: data._id, email: data.email}, process.env.JWT_SECRET, { expiresIn: '1h' })
+    let payload = {
+        id: data._id,
+        email: data.email
+    }
+    if(email === process.env.ADMIN_EMAIL){
+        payload.role = "admin"
+    }
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' })
     return res.status(200).json({"message": "Register Successful!", token})
 }
 
@@ -34,7 +41,14 @@ async function userLogin(req,res) {
     if(!isMatch){
         return res.status(400).json({"message": "Invalid password"})
     }
-    jwt.sign({id: data._id, email: data.email}, process.env.JWT_SECRET, { expiresIn: '1h' })
+    let payload = {
+        id: data._id,
+        email: data.email
+    }
+    if(email === process.env.ADMIN_EMAIL){
+        payload.role = "admin"
+    }
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' })
     return res.status(200).json({"message": "Login successful", token})
 }
 

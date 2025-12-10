@@ -1,6 +1,5 @@
 const {Resume} = require("../models/resume")
 const {cloudinary} = require("../config/cloudinary")
-const { upload } = require("../middlewares/multer")
 
 async function uploadResume(req,res) {
     const userId = req.user.id
@@ -18,7 +17,7 @@ async function uploadResume(req,res) {
         folder: "resumes"
     })
 
-    const {name, email, phone, github, linkdin, skills, experience, education} = req.body
+    const {name, email, phone, github, linkedin, skills, experience, education} = req.body
 
     const data = await Resume.create({
         userId,
@@ -26,10 +25,10 @@ async function uploadResume(req,res) {
         email,
         phone,
         github,
-        linkdin,
-        skills,
-        experience,
-        education,
+        linkedin,
+        skills : skills? JSON.parse(skills): [],
+        experience: experience? JSON.parse(experience): [],
+        education: education? JSON.parse(education): [],
         resumeUrl: uploaded.secure_url
     })
 
@@ -51,4 +50,41 @@ async function getMyResume(req,res) {
     return res.status(200).json({data})
 }
 
-module.exports = {uploadResume, getMyResume}
+async function updateResume(req,res) {
+    const userId = req.user.id
+    if(!userId){
+        return res.status(400).json({"message": "userId required"})
+    }
+    const data = await Resume({userId})
+
+    if(!data){
+        return res.status(404).json({"message": "Resume not found"})
+    }
+
+    const {name, email, phone, github, linkedin, skills, experience, education} = req.body
+
+    data.name = name || data.name
+    data.email = email || data.email
+    data.phone = phone || data.phone
+    data.github = github || data.github
+    data.linkedin = linkedin || data.linkedin
+
+    if(skills) data.skills = JSON.parse(skills);
+    if(experience) data.experience = JSON.parse(experience);
+    if(education) data.education = JSON.parse(education);
+
+    if(req.file){
+        const uploaded = await cloudinary.uploader.upload(req.file.path, {
+            folder: "resumes",
+            resource_type: "raw"
+        })
+
+        data.resumeUrl = uploaded.secure_url
+    }
+
+    const updated = await data.save()
+
+    return res.status(200).json({"message": "Updated successfully", updated})
+}
+
+module.exports = {uploadResume, getMyResume, updateResume}

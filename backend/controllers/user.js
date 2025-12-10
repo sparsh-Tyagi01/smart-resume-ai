@@ -27,6 +27,7 @@ async function userRegister(req,res) {
 }
 
 async function userLogin(req,res) {
+    const {email, password} = req.body
     const data = await User.findOne({email})
     if(!data) return res.status(400).json({"message": "Invalid Email address"});
     const isMatch = await bcrypt.compare(password,data.password)

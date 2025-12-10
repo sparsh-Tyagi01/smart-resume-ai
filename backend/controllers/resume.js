@@ -5,6 +5,10 @@ const { upload } = require("../middlewares/multer")
 async function uploadResume(req,res) {
     const userId = req.user.id
 
+    if(!userId){
+        return res.status(400).json({"message": "userId required"})
+    }
+
     if(!req.file){
         return res.status(400).json({"message": "No resume file uploaded"})
     }
@@ -32,4 +36,19 @@ async function uploadResume(req,res) {
     return res.status(200).json({"message": "Resume uploaded successfully", data})
 }
 
-module.exports = {uploadResume}
+async function getMyResume(req,res) {
+    const userId = req.user.id
+    if(!userId){
+        return res.status(400).json({"message": "userId required"})
+    }
+
+    const data = await Resume.findOne({userId})
+
+    if(!data){
+        return res.status(400).json({"message": "Upload resume"})
+    }
+
+    return res.status(200).json({data})
+}
+
+module.exports = {uploadResume, getMyResume}

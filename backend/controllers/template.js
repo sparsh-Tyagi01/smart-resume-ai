@@ -7,11 +7,11 @@ async function createTemplate(req,res) {
       return res.status(400).json({ error: "Image and HTML file are required" });
     }
 
-    const uploadedImage = await cloudinary.uploader.upload(req.file.image[0].path, {
+    const uploadedImage = await cloudinary.uploader.upload(req.files.image[0].path, {
         resource_type: "image",
         folder: "templates"
     })
-    const uploadedHtml = await cloudinary.uploader.upload(req.file.html[0].path, {
+    const uploadedHtml = await cloudinary.uploader.upload(req.files.html[0].path, {
         resource_type: "raw",
         folder: "htmlTemplates"
     })
@@ -50,4 +50,30 @@ async function deleteTemplate(req,res) {
     return res.status(200).json({message: "Deleted Successfully"})
 }
 
-module.exports = {createTemplate, getTemplates, getTemplatesById, deleteTemplate}
+async function updateTemplate(req,res) {
+    const {name, fields} = req.body
+    let payload = {name, fields: fields? fields.split(","):[]}
+    if(req.files.image){
+        const uploadedImage = await cloudinary.uploader.upload(req.files.image[0].path, {
+            resource_type: "image",
+            folder: "templates"
+        })
+        payload.previewUrl = uploadedImage.secure_url
+    }
+    if(req.files.html){
+        const uploadedHtml = await cloudinary.uploader.upload(req.files.html[0].path, {
+            resource_type: "raw",
+            folder: "htmlTemplates"
+        })
+        payload.htmlUrl = uploadedHtml.secure_url
+    }
+
+    const data = await Template.findByIdAndUpdate(req.params.id, payload, {new: true})
+
+    if(!data){
+        return res.status(404).json({message: "Template not found"})
+    }
+    return res.status(200).json({message: "Updated Successfully"})
+}
+
+module.exports = {createTemplate, getTemplates, getTemplatesById, deleteTemplate, updateTemplate}

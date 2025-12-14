@@ -5,7 +5,7 @@ async function createJob(req,res) {
     const {jobTitle, company, location, jobLink, status, note, resumeId} = req.body
     const userId = req.user.id
 
-    const resume = await Resume.find({_id: resumeId, userId})
+    const resume = await Resume.findOne({_id: resumeId, userId})
     if(!resume){
         return res.status(404).json({message: "Invalid resume selected"})
     }
@@ -19,11 +19,21 @@ async function createJob(req,res) {
 
 async function getMyJob(req,res) {
     const userId = req.user.id
-    const data = await (await Job.find({userId}).populate("resumeId", "name resumeUrl")).sort({createdAt: -1})
+    const data = await Job.find({userId}).populate("resumeId", "name resumeUrl").sort({createdAt: -1})
     if(!data){
         return res.status(404).json({message: "No job found"})
     }
     return res.status(200).json({data})
 }
 
-module.exports = {createJob, getMyJob}
+async function getJobById(req,res) {
+    const id = req.params.id
+    const userId = req.user.id
+    const data = await Job.findOne({_id: id, userId}).populate("resumeId").sort({createdAt: -1})
+    if(!data){
+        return res.status(404).json({message: "No job found"})
+    }
+    return res.status(200).json({data})
+}
+
+module.exports = {createJob, getMyJob, getJobById}

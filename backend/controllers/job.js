@@ -36,4 +36,15 @@ async function getJobById(req,res) {
     return res.status(200).json({data})
 }
 
-module.exports = {createJob, getMyJob, getJobById}
+async function deleteJob(req,res) {
+    const id = req.params.id
+    const userId = req.user.id
+    const data = await Job.findByIdAndDelete({_id: id, userId})
+    if (!data) {
+      return res.status(404).json({ message: "Job not found or not authorized" })
+    }
+
+    return res.status(200).json({ message: "Job deleted successfully" })
+}
+
+module.exports = {createJob, getMyJob, getJobById, deleteJob}

@@ -41,7 +41,7 @@ async function getMyResume(req,res) {
         return res.status(400).json({message: "userId required"})
     }
 
-    const data = await Resume.findOne({userId})
+    const data = await Resume.find({userId})
 
     if(!data){
         return res.status(400).json({message: "Upload resume"})
@@ -87,4 +87,12 @@ async function updateResume(req,res) {
     return res.status(200).json({message: "Updated successfully", updated})
 }
 
-module.exports = {uploadResume, getMyResume, updateResume}
+async function deleteResume(req,res) {
+    const data = await Resume.findByIdAndDelete(req.params.id)
+    if(!data){
+        return res.status(404).json({message: "Resume not found"})
+    }
+    return res.status(200).json({message: "Deleted Successfully"})
+}
+
+module.exports = {uploadResume, getMyResume, updateResume, deleteResume}

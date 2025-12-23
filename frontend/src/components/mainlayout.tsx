@@ -13,7 +13,6 @@ const Mainlayout = () => {
       </main>
 
       <footer className="w-full mt-10">
-        {/* <Footer /> */}
       </footer>
     </div>
   )

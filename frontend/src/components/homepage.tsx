@@ -84,8 +84,8 @@ const Homepage = () => {
     ]
 
   return (
-    <div className="w-screen">
-        <div className="bg-slate-100 w-full min-h-screen flex flex-col justify-center items-center pt-30 pb-20">
+    <div className="w-full">
+        <div className="bg-slate-100 w-full h-auto py-20 flex flex-col justify-center items-center pt-24">
             <h1 className="text-6xl">Land Your Dream Job With <span className="bg-blue-900 bg-clip-text text-black/0 font-extrabold">AI-</span></h1>
             <h1 className="text-6xl bg-gradient-to-r from-blue-900 to-green-800 bg-clip-text text-black/0 font-extrabold">Powered Resumes</h1>
             <div className="flex flex-col justify-center items-center text-black/60 mt-10 text-xl">
@@ -103,17 +103,17 @@ const Homepage = () => {
                 <li className="flex justify-center items-center gap-1 text-xs"><Check className="text-green-600"/>AI-Powered</li>
             </ul>
             <div className="mt-10 flex justify-evenly items-center gap-8">
-                <div className="w-[25vw] h-[30vh] bg-white rounded-2xl flex flex-col justify-center items-center shadow-2xl">
+                <div className="w-[25vw] min-h-[220px] bg-white rounded-2xl flex flex-col justify-center items-center shadow-2xl">
                     <Users size={60} className="rounded-full bg-blue-300 text-blue-700 p-2"/>
                     <h1 className="text-2xl mt-1">50,000+</h1>
                     <p className="text-black/60">Active Users</p>
                 </div>
-                <div className="w-[25vw] h-[30vh] bg-white rounded-2xl flex flex-col justify-center items-center shadow-2xl">
+                <div className="w-[25vw] min-h-[220px] bg-white rounded-2xl flex flex-col justify-center items-center shadow-2xl">
                     <NotebookPen size={60} className="rounded-full bg-violet-300 text-violet-700 p-2"/>
                     <h1 className="text-2xl mt-1">100,000+</h1>
                     <p className="text-black/60">Resumes Created</p>
                 </div>
-                <div className="w-[25vw] h-[30vh] bg-white rounded-2xl flex flex-col justify-center items-center shadow-2xl">
+                <div className="w-[25vw] min-h-[220px] bg-white rounded-2xl flex flex-col justify-center items-center shadow-2xl">
                     <Medal size={60} className="rounded-full bg-green-300 text-green-700 p-2"/>
                     <h1 className="text-2xl mt-1">85%</h1>
                     <p className="text-black/60">Success Rate</p>
@@ -121,7 +121,7 @@ const Homepage = () => {
             </div>
         </div>
 
-        <div className="w-full min-h-screen flex flex-col justify-center items-center pt-30 pb-20">
+        <div className="w-full flex flex-col justify-center items-center py-24">
             <h1 className="text-4xl text-black/80">
                 Everything You Need to Succeed
             </h1>
@@ -145,7 +145,7 @@ const Homepage = () => {
                 </div>
             ))}
             </div>
-            <h1 className="mt-25 text-4xl text-black/80">
+            <h1 className="mt-24 text-4xl text-black/80">
                 How It Works
             </h1>
             <p className="mt-4 text-xl text-black/60">
@@ -154,7 +154,7 @@ const Homepage = () => {
             <div className="flex justify-evenly items-center w-[80vw] gap-4 mt-20">
                 {works.map((i)=>(
                     <div key={i.id} className="flex flex-col items-center justify-center gap-2">
-                        <div className={`text-xl text-white w-18 h-18 rounded-[100%] ${i.bgColor} flex justify-center items-center`}>{i.id}</div>
+                        <div className={`text-xl text-white w-16 h-16 rounded-[100%] ${i.bgColor} flex justify-center items-center`}>{i.id}</div>
                         <h1 className="text-xl text-black/80">{i.heading}</h1>
                         <p className="text-black/60 text-center">{i.content}</p>
                     </div>

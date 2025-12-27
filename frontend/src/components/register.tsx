@@ -33,7 +33,7 @@ const Register = () => {
                 </div>
                 <div>
                     <label htmlFor="otp" className="block">OTP {"(one-time-password)"}</label>
-                    <input type="text" id="otp" placeholder="🕐 Enter one-time-password..." className="w-[30vw] focus:outline-none border-2 border-black/20 p-1 rounded-[10px]"/>
+                    <input type="number" id="otp" placeholder="🕐 Enter one-time-password..." className="w-[30vw] no-spinner focus:outline-none border-2 border-black/20 p-1 rounded-[10px]"/>
                 </div>
                 <button className="w-[30vw] mt-2 bg-gradient-to-r from-green-700 to-emerald-600 rounded-[5px] text-white py-1 hover:from-green-800 hover:to-emerald-700 transition-all duration-200 cursor-pointer">Create Account</button>
             </form>
